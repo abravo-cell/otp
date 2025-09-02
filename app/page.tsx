@@ -38,8 +38,8 @@ export default function App() {
   // Pega tu texto aquí (reemplaza TODO el contenido entre las comillas)
   const pastedText = `
 Los datos personales que nos comparte como Titular serán tratados por HAPPYCEL S.A. en calidad del responsable. HAPPYCEL S.A. recopilará datos de identificación, económicos y crediticios para las finalidades descritas en la presente autorización.
-Por ello, con base en el consentimiento que brinda a través de esta autorización, usted autoriza el tratamiento de sus datos personales para realizar la consulta, almacenamiento y uso de la información correspondiente a la mora en: las bases de la compañía COBRAFACIL S.A.; en las bases de los diferentes burós de crédito, y envío de las cotizaciones correspondientes a las diferentes tiendas de propiedad de o administradas por HAPPYCEL S.A., además.
 
+Por ello, con base en el consentimiento que brinda a través de esta autorización, usted autoriza el tratamiento de sus datos personales para realizar la consulta, almacenamiento y uso de la información correspondiente a la mora en: las bases de la compañía COBRAFACIL S.A.; en las bases de los diferentes burós de crédito, y envío de las cotizaciones correspondientes a las diferentes tiendas de propiedad de o administradas por HAPPYCEL S.A., además.
 De igual manera, declara conocer que sus datos personales se conservarán por el tiempo que dure la relación comercial o mientras exista una base legitimadora para el tratamiento. Posterior a los tiempos previamente descritos, HAPPYCEL S.A. podrá anonimizar los datos. En caso de no anonimizarlos, HAPPYCEL S.A. procederá a la eliminación de estos.
 
 HAPPYCEL S.A. adopta las medidas de seguridad necesarias para garantizar la confidencialidad y seguridad de los datos personales. En caso de vulneración de estos se actuará y notificará de acuerdo con lo establecido en la normativa correspondiente.
