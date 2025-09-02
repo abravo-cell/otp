@@ -63,8 +63,18 @@ Para ejercer cualquiera de los derechos de protección de datos o realizar una c
           <h2 className="dpd-subtitle">POLÍTICA DE PROTECCIÓN DE DATOS</h2>
         </header>
 
+        <figure className="dpd-figure">
+          <img
+            src="https://imagenescn.s3.us-east-2.amazonaws.com/happy.png"
+            alt="Autorización y protección de datos"
+            className="dpd-image"
+            loading="lazy"
+            width={500}
+          />
+        </figure>
+
         <section className="dpd-content">
-          <pre className="dpd-text">{pastedText.trim()}</pre>
+          <div className="dpd-text">{pastedText.trim()}</div>
         </section>
 
         <footer className="dpd-footer">
