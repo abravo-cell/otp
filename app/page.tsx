@@ -86,7 +86,7 @@ Para ejercer cualquiera de los derechos de protección de datos o realizar una c
     setIsLoading(true)
     try {
       // Aquí puedes usar tu API existente o crear una nueva específica para el simulador
-      const res = await fetch(`/api/OTP?identificacion=${identificacion}&codigo=${"code"}`)
+      const res = await fetch(`/api/OTP?identificacion=${identificacion}&codigo=${code}`)
       const data = await res.json()
       console.log(data.message)
       toast.success(data.message)
