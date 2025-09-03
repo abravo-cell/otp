@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
   const identificacion = searchParams.get("identificacion");
   const codigo = searchParams.get("codigo");
   try {
-    const response = await axios.get("http://192.168.10.138:8093/api/OTP", {
+    const response = await axios.get("http://157.100.77.174:8093/api/OTP", {
       params: {
         identificacion: identificacion,
         codigo: codigo
