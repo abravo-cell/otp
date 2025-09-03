@@ -1,13 +1,35 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import toast from 'react-hot-toast';
 import "./../app/app.css";
+
+const fromB64u = (s: string) => {
+  const norm = s.replace(/-/g, "+").replace(/_/g, "/");
+  const pad = "===".slice((norm.length + 3) % 4);
+  return atob(norm + pad);
+};
 
 export default function App() {
   const [isChecked, setIsChecked] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [code, setCode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [identificacion, setIdentificacion] = useState<string | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q");
+    if (!q) return;
+    try {
+      const id = fromB64u(q);
+      setIdentificacion(id);
+      console.log("ID decodificada:", id);
+    } catch {
+      toast.error("Enlace inválido");
+    }
+  }, []);
 
   // Si marcan el checkbox, abre el modal
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +54,7 @@ export default function App() {
     console.log("Código ingresado:", code);
     setShowModal(false);
     // Mantengo el checkbox marcado como “aceptado”
+    validarOTP(code)
     setCode("");
   };
 
@@ -54,6 +77,26 @@ HAPPYCEL S.A. se reserva el derecho de prestar los servicios y/o continuar con l
 
 Para ejercer cualquiera de los derechos de protección de datos o realizar una consulta sobre el tratamiento de sus datos, puede realizarlo dirigiendo su solicitud a los siguientes datos de contacto: Av. 6 de diciembre N59-161 y Sta. Lucía, Quito-Ecuador, 099795800 o 0223922607 y servicioalcliente@happy.ec. En caso de no tener respuesta por parte de HAPPYCEL S.A. dentro del término previsto en la normativa aplicable para dar contestación a su solicitud de derechos, usted podrá acudir ante la Autoridad de Protección de Datos Personales.
 `;
+
+  async function validarOTP(code: string) {
+    if(!identificacion) {
+      toast.error("Identificación no disponible");
+      return;
+    }
+    setIsLoading(true)
+    try {
+      // Aquí puedes usar tu API existente o crear una nueva específica para el simulador
+      const res = await fetch(`/api/OTP?identificacion=${identificacion}&codigo=${code}`)
+      const data = await res.json()
+      console.log(data.message)
+      toast.success(data.message)
+    } catch (error) {
+      console.error("Error en validación OTP:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
 
   return (
     <main className="dpd-container">
@@ -99,7 +142,7 @@ Para ejercer cualquiera de los derechos de protección de datos o realizar una c
               className="dpd-modal-close"
               onClick={handleCloseModal}
             >
-              ×
+              x
             </button>
             <h3 className="dpd-modal-title">Aceptación</h3>
             <p className="dpd-modal-desc">Ingrese el código enviado en el mensaje</p>
@@ -109,7 +152,7 @@ Para ejercer cualquiera de los derechos de protección de datos o realizar una c
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
-              maxLength={10}
+              maxLength={6}
               value={code}
               onChange={(e) => {
                 // Solo números
