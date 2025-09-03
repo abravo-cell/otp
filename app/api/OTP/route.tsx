@@ -6,10 +6,10 @@ export async function GET(req: NextRequest) {
   const identificacion = searchParams.get("identificacion");
   const codigo = searchParams.get("codigo");
   try {
-    const response = await axios.get("http://192.168.10.138:8093/api/OTP", {
+    const response = await axios.get("http://192.168.10.138:8094/api/Promocion", {
       params: {
         identificacion: identificacion,
-        codigo: codigo
+        usuario: codigo
       },
       headers: {
         API_KEY: "VBrqN7XNnWJDjH07Nl7QHhKCvYtPKaWc",
