@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import toast from 'react-hot-toast';
 import "./../app/app.css";
+import { useRouter } from "next/navigation";
 
 const fromB64u = (s: string) => {
   const norm = s.replace(/-/g, "+").replace(/_/g, "/");
@@ -17,6 +18,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [identificacion, setIdentificacion] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -50,10 +52,7 @@ export default function App() {
   };
 
   const handleAccept = () => {
-    // Aquí harás la validación/integración real luego
-    console.log("Código ingresado:", code);
     setShowModal(false);
-    // Mantengo el checkbox marcado como “aceptado”
     validarOTP(code)
     setCode("");
   };
@@ -79,7 +78,7 @@ Para ejercer cualquiera de los derechos de protección de datos o realizar una c
 `;
 
   async function validarOTP(code: string) {
-    if(!identificacion) {
+    if (!identificacion) {
       toast.error("Identificación no disponible");
       return;
     }
@@ -88,14 +87,60 @@ Para ejercer cualquiera de los derechos de protección de datos o realizar una c
       // Aquí puedes usar tu API existente o crear una nueva específica para el simulador
       const res = await fetch(`/api/OTP?identificacion=${identificacion}&codigo=${code}`)
       const data = await res.json()
-      console.log(data.message)
-      toast.success(data.message)
+
+      const msg = data?.message;
+
+      if (msg === "No existe autorización de la otp") {
+        toast.error(msg);
+      } else {
+        toast.success(msg);
+      }
+
+      if (data.message?.trim().toLowerCase() === "otp autorizada") {
+        await registrarOTP(code);
+      }
+      return true;
     } catch (error) {
       console.error("Error en validación OTP:", error)
     } finally {
       setIsLoading(false)
     }
   }
+
+  async function registrarOTP(code: string) {
+    if (!identificacion) {
+      toast.error("Identificación no disponible");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/OTP", {
+        method: "PUT",
+
+        body: JSON.stringify({
+          identificacion,
+          codigo: code,
+          aprobacion: "SI",
+        }),
+      });
+      
+      if( res.status === 200){
+        toast.success("OTP registrada correctamente");
+        router.push("/validacion-exitosa");
+      }else{
+        toast.error("Error al registrar OTP");
+        return;
+      }
+      
+    } catch (e) {
+      console.error("Error en registro OTP:", e);
+      toast.error("No se pudo registrar la OTP");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+
 
 
   return (
